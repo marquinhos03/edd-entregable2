@@ -3,19 +3,19 @@
 #include <functional>
 
 // Nodo
-Arbol::Nodo::Nodo(string data, Nodo* padre)
-    : m_data(data)
-    , m_padre(padre) {
+Arbol::Nodo::Nodo(string data, Nodo* padre) {
+    m_data = data;
+    m_padre = padre;
 }
 
 /**
  * @brief Constructor
  * @param k Número de hijos por nodo
  */
-Arbol::Arbol(int _k)
-    : k(_k)
-    , rootNodo(nullptr)
-    , treeSize(0) {
+Arbol::Arbol(int k) {
+    this->k = k;
+    rootNodo = nullptr;
+    treeSize = 0;
 }
 
 bool Arbol::isEmpty() {
@@ -26,7 +26,9 @@ int Arbol::size() {
     return treeSize;
 }
 
-// Retorna el nodo ráíz del arbol
+/**
+ * @brief Retorna el nodo ráíz del arbol
+ */
 string Arbol::root() {
     if (!rootNodo) throw runtime_error("Arbol vacío");
     return rootNodo->m_data;
@@ -45,27 +47,24 @@ Arbol::Nodo* Arbol::buscar(Nodo* nodo, string data) {
     return nullptr;
 }
 
-bool Arbol::insertar(string dataPadre, string data) {
-    // Caso base: Si el arbol esta vacío, creamos el nodo raíz
+Arbol::Nodo* Arbol::insertar(Nodo* padre, string data) {
+    // Caso base: Si el arbol esta vacío, creamos el nodo raíz.
     if (!rootNodo) {
         rootNodo = new Nodo(data);
         treeSize++;
-        return true;
+        return rootNodo;
     }
 
-    // Si el arbol existe, buscamos desde la raíz el nodo que tenga almacenado <dataPadre>
-    Nodo* nodoPadre = buscar(rootNodo, dataPadre);
-    // Si el padre no existe, rechazamos la inserción
-    if (!nodoPadre) return false;
+    // Caso error: Si ya existe rootNodo y se envía padre = nullptr,
+    // se rechaza la inserción.
+    if (!padre) return nullptr;
 
-    // Si <nodoPadre> tiene k hijos, rechazamos la inserción
-    // if ((int)nodoPadre->hijos.size() >= k) return false;
-
-    // Caso éxito: se realiza la inserción
-    Nodo* nuevoNodo = new Nodo(data, nodoPadre);
-    nodoPadre->m_hijos.push_back(nuevoNodo);
+    // Caso éxito: Se realiza la inserción.
+    Nodo* nuevoNodo = new Nodo(data, padre);
+    padre->m_hijos.push_back(nuevoNodo);
     treeSize++;
-    return true;
+
+    return nuevoNodo;
 }
 
 /**

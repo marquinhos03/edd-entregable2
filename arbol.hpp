@@ -23,7 +23,7 @@ private:
     void deleteSubtree(Nodo); //si se borra un nodo, se borran todos sus hijos y luego ese nodo.
 
 public:
-    Arbol(int _k);
+    Arbol(int k);
 
     bool isEmpty();
     int size();
@@ -33,7 +33,7 @@ public:
     int padre(int value);
     vector<string> hijos(string val);
 
-    bool insertar(string dataPadre, string data);
+    Nodo* insertar(Nodo* padre, string data);
     bool remover(int value);
     
     Nodo* buscar(Nodo* nodo, string data);
