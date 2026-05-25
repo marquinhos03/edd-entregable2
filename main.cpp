@@ -10,8 +10,8 @@ int main() {
 
     auto raiz = miArbol.insertar(nullptr, "Raíz Libros");
 
-    miArbol.insertarLibro("1.xml");
-    //miArbol.insertarLibro("2.xml");
+    miArbol.insertarLibro("books_xml/1.xml");
+    //miArbol.insertarLibro("books_xml/2.xml");
 
     cout << "Tamaño: " << miArbol.size() << endl;
 
