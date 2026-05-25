@@ -1,32 +1,36 @@
 #include "arbol.hpp"
 #include "extern/tinyxml2.h"
 
+using namespace std;
 using namespace tinyxml2;
 
-struct InfoTag {
-    const char* xml_tag;    // tag en el archivo xml
-    const char* nodo_tag;   // nombre del nodo en el árbol
-};
+namespace {
+    struct InfoTag {
+        const char* xml_tag;    // tag en el archivo xml
+        const char* nodo_tag;   // nombre del nodo en el árbol
+    };
 
-namespace Tags {
-    constexpr InfoTag ROOT = { "GoodreadsResponse", "Raíz Libros" };
-    constexpr InfoTag LIBRO = { "book", "Libro" };
-    constexpr InfoTag ID = { "id", "ID" };
-    constexpr InfoTag TITULO = { "title", "Título" };
-    constexpr InfoTag ISBN = { "isbn", "ISBN" };
-    constexpr InfoTag PUBLICATION_YEAR = { "publication_year", "Año de publicación" };
-    constexpr InfoTag IDIOMA = { "language_code", "Idioma" };
-    constexpr InfoTag DESCRIPCION = { "description", "Descripción" };
-    constexpr InfoTag RATING_PROMEDIO = { "average_rating", "Rating promedio" };
-    constexpr InfoTag NUMERO_PAGINAS = { "num_pages", "Número de páginas" };
-};
+    namespace Tags {
+        constexpr InfoTag RAIZ = { "GoodreadsResponse", "Raíz Libros" };
+        constexpr InfoTag LIBRO = { "book", "Libro" };
+        constexpr InfoTag ID = { "id", "ID" };
+        constexpr InfoTag TITULO = { "title", "Título" };
+        constexpr InfoTag ISBN = { "isbn", "ISBN" };
+        constexpr InfoTag PUBLICATION_YEAR = { "publication_year", "Año de publicación" };
+        constexpr InfoTag IDIOMA = { "language_code", "Idioma" };
+        constexpr InfoTag DESCRIPCION = { "description", "Descripción" };
+        constexpr InfoTag RATING_PROMEDIO = { "average_rating", "Rating promedio" };
+        constexpr InfoTag NUMERO_PAGINAS = { "num_pages", "Número de páginas" };
+    };
+}
+
 
 void Arbol::insertarLibro(const string& archivo) {
     XMLDocument doc;
     doc.LoadFile(archivo.c_str());
 
     // Acceso a la raiz
-    XMLNode* root = doc.FirstChildElement(Tags::ROOT.xml_tag);
+    XMLNode* root = doc.FirstChildElement(Tags::RAIZ.xml_tag);
     // Acceso al hijo
     XMLElement* book = root->FirstChildElement(Tags::LIBRO.xml_tag);
 

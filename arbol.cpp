@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <functional>
 
+using namespace std;
+
 // Nodo
 Arbol::Nodo::Nodo(string data, Nodo* padre) {
     m_data = data;

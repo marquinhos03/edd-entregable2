@@ -1,25 +1,26 @@
+#ifndef ARBOL_HPP
+#define ARBOL_HPP
+
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 class Arbol {
 private:
     // Nodo
     struct Nodo {
-        string m_data;    // tag/campo o valor a almacenar
+        std::string m_data;    // tag/campo o valor a almacenar
         Nodo* m_padre;
-        vector<Nodo*> m_hijos;
+        std::vector<Nodo*> m_hijos;
 
-        Nodo(string data, Nodo* padre = nullptr);
+        Nodo(std::string data, Nodo* padre = nullptr);
     };
 
     Nodo* rootNodo;
     int treeSize;
     int k;  // Número de hijos por cada nodo
 
-    void preOrder(Nodo* nodo, vector<string>& result);
-    void postOrder(Nodo* nodo, vector<int>& result);
+    void preOrder(Nodo* nodo, std::vector<std::string>& result);
+    void postOrder(Nodo* nodo, std::vector<int>& result);
     void deleteSubtree(Nodo); //si se borra un nodo, se borran todos sus hijos y luego ese nodo.
 
 public:
@@ -32,19 +33,21 @@ public:
     Nodo* raiz();
 
     int padre(int value);
-    vector<string> hijos(string val);
+    std::vector<std::string> hijos(std::string data);
 
-    Nodo* insertar(Nodo* padre, string data);
+    Nodo* insertar(Nodo* padre, std::string data);
     bool remover(int value);
     
-    Nodo* buscar(Nodo* nodo, string data);
+    Nodo* buscar(Nodo* nodo, std::string data);
 
-    vector<string> preOrder();
-    vector<int> postOrder();
-    vector<int> inOrder();
+    std::vector<std::string> preOrder();
+    std::vector<int> postOrder();
+    std::vector<int> inOrder();
 
 
     // Uso de string& para pasar una referencia al string original.
     // Sin el &, se crearia una copia del string.
-    void insertarLibro(const string& archivo);
+    void insertarLibro(const std::string& archivo);
 };
+
+#endif
