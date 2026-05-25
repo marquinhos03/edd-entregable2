@@ -8,7 +8,7 @@ using namespace std;
 int main() {
     Arbol miArbol(6);
 
-    auto raiz = miArbol.insertar(nullptr, "(Raíz Libros)");
+    auto raiz = miArbol.insertar(nullptr, "Raíz Libros");
 
     miArbol.insertarLibro("1.xml");
     miArbol.insertarLibro("2.xml");

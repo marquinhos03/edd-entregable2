@@ -1,4 +1,5 @@
 #include "arbol.hpp"
+#include "lector_xml.hpp"
 #include <algorithm>
 #include <functional>
 
@@ -107,4 +108,30 @@ vector<string> Arbol::preOrder() {
     vector<string> result;
     preOrder(rootNodo, result);
     return result;
+}
+
+
+
+void Arbol::insertarLibro(const string& archivo) {
+    LectorXML archivoXML(archivo);
+    
+    auto libro = insertar(raiz(), archivo);
+
+    auto nodoId = insertar(libro, "ID");
+    auto nodoTitulo = insertar(libro, "Título");
+    auto nodoIsbn = insertar(libro, "ISBN");
+    auto nodoPublicationYear = insertar(libro, "Año de publicación");
+    auto nodoIdioma = insertar(libro, "Idioma");
+    //auto nodoDescripcion = insertar(libro, "Descripción");
+    auto nodoRatingPromedio = insertar(libro, "Rating promedio");
+    auto nodoNumeroPaginas = insertar(libro, "Número de páginas");
+
+    insertar(nodoId, archivoXML.getId());
+    insertar(nodoTitulo, archivoXML.getTitulo());
+    insertar(nodoIsbn, archivoXML.getIsbn());
+    insertar(nodoPublicationYear, archivoXML.getPublicationYear());
+    insertar(nodoIdioma, archivoXML.getIdioma());
+    //insertar(nodoDescripcion, archivoXML.getDescripcion());
+    insertar(nodoRatingPromedio, archivoXML.getRatingPromedio());
+    insertar(nodoNumeroPaginas, archivoXML.getNumeroPaginas());
 }
