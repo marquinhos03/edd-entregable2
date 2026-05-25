@@ -196,19 +196,20 @@ void Arbol::insertarLibro(const string& archivo) {
     LectorXML archivoXML(archivo);
 
     // Insertamos el libro como hijo de la raiz
-    auto libro = insertar(rootNodo, archivo);
+    auto nodoLibro = insertar(rootNodo, archivo);
 
     // Insertamos nodos hijos del libro
-    auto nodoId = insertar(libro, "ID");
-    auto nodoTitulo = insertar(libro, "Título");
-    auto nodoIsbn = insertar(libro, "ISBN");
-    auto nodoPublicationYear = insertar(libro, "Año de publicación");
-    auto nodoIdioma = insertar(libro, "Idioma");
-    auto nodoDescripcion = insertar(libro, "Descripción");
-    auto nodoRatingPromedio = insertar(libro, "Rating promedio");
-    auto nodoNumeroPaginas = insertar(libro, "Número de páginas");
+    auto nodoId = insertar(nodoLibro, "ID");
+    auto nodoTitulo = insertar(nodoLibro, "Título");
+    auto nodoIsbn = insertar(nodoLibro, "ISBN");
+    auto nodoPublicationYear = insertar(nodoLibro, "Año de publicación");
+    auto nodoIdioma = insertar(nodoLibro, "Idioma");
+    auto nodoDescripcion = insertar(nodoLibro, "Descripción");
+    auto nodoRatingPromedio = insertar(nodoLibro, "Rating promedio");
+    auto nodoNumeroPaginas = insertar(nodoLibro, "Número de páginas");
+    auto nodoLibrosSimilares = insertar(nodoLibro, "Libros similares");
 
-    // Insertamos datos del libro a los nodos correspondientes
+    // Insertamos nodos hijos (con los datos del libro)
     insertar(nodoId, archivoXML.getId());
     insertar(nodoTitulo, archivoXML.getTitulo());
     insertar(nodoIsbn, archivoXML.getIsbn());
@@ -217,4 +218,23 @@ void Arbol::insertarLibro(const string& archivo) {
     insertar(nodoDescripcion, archivoXML.getDescripcion());
     insertar(nodoRatingPromedio, archivoXML.getRatingPromedio());
     insertar(nodoNumeroPaginas, archivoXML.getNumeroPaginas());
+    //insertar(nodoLibrosSimilares, archivoXML.getLibrosSimilares());
+
+    // Insertamos libros similares
+    vector<LibroSimilar> librosSim = archivoXML.getLibrosSimilares();
+
+    int contador = 1;
+    for (const LibroSimilar& libroSim : librosSim) {
+        auto nodoLibroSim = insertar(nodoLibrosSimilares, "Libro " + to_string(contador));
+
+        auto nodoTituloSim = insertar(nodoLibroSim, "Título");
+        auto nodoIsbnSim = insertar(nodoLibroSim, "ISBN");
+        auto nodoPublicationYearSim = insertar(nodoLibroSim, "Año de publicación");
+
+        insertar(nodoTituloSim, libroSim.m_titulo);
+        insertar(nodoIsbnSim, libroSim.m_isbn);
+        insertar(nodoPublicationYearSim, libroSim.m_publication_year);
+
+        contador++;
+    }
 }

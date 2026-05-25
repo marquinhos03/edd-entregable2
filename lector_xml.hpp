@@ -3,6 +3,13 @@
 
 #include <iostream>
 #include <string.h>
+#include <vector>
+
+struct LibroSimilar {
+    std::string m_titulo;
+    std::string m_isbn;
+    std::string m_publication_year;
+};
 
 class LectorXML {
 private:
@@ -14,6 +21,7 @@ private:
     std::string m_descripcion;
     std::string m_rating_promedio;
     std::string m_numero_paginas;
+    std::vector<LibroSimilar> m_libros_similares;
 
 public:
     LectorXML(const std::string& archivo);
@@ -26,6 +34,7 @@ public:
     std::string getDescripcion();
     std::string getRatingPromedio();
     std::string getNumeroPaginas();
+    std::vector<LibroSimilar> getLibrosSimilares();
 };
 
 #endif
