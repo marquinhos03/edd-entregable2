@@ -1,4 +1,4 @@
-// Compilación: g++ main.cpp extern/tinyxml2.cpp arbol.cpp arbol_xml.cpp
+// Compilación: g++ main.cpp extern/tinyxml2.cpp arbol.cpp lector_xml.cpp
 // Ejecucion: ./a.out
 #include <iostream>
 #include "arbol.hpp"
