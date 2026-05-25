@@ -29,10 +29,15 @@ int Arbol::size() {
 /**
  * @brief Retorna el nodo ráíz del arbol
  */
-string Arbol::root() {
+Arbol::Nodo* Arbol::raiz() {
     if (!rootNodo) throw runtime_error("Arbol vacío");
-    return rootNodo->m_data;
+    return rootNodo;
 }
+
+ // string Arbol::raiz() {
+//     if (!rootNodo) throw runtime_error("Arbol vacío");
+//     return rootNodo->m_data;
+// }
 
 Arbol::Nodo* Arbol::buscar(Nodo* nodo, string data) {
     if (!nodo) return nullptr;

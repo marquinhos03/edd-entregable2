@@ -1,3 +1,6 @@
+// Compilación: g++ main2.cpp extern/tinyxml2.cpp arbol.cpp
+// Ejecucion: ./a.out
+
 #include <iostream>
 #include "arbol.hpp"
 
@@ -8,20 +11,23 @@ int main() {
 
     auto raiz = miArbol.insertar(nullptr, "(Raíz Libros)");
 
-    auto libro1 = miArbol.insertar(raiz, "(Libro 1)");
-    auto libro2 = miArbol.insertar(raiz, "(Libro 2)");
+    miArbol.insertarLibro("1.xml");
+    miArbol.insertarLibro("2.xml");
 
-    auto id1 = miArbol.insertar(libro1, "(id)");
-    auto id2 = miArbol.insertar(libro2, "(id)");
+    // auto libro1 = miArbol.insertar(raiz, "(Libro 1)");
+    // auto libro2 = miArbol.insertar(raiz, "(Libro 2)");
 
-    auto titulo1 = miArbol.insertar(libro1, "(titulo)");
-    auto titulo2 = miArbol.insertar(libro2, "(titulo)");
+    // auto id1 = miArbol.insertar(libro1, "(id)");
+    // auto id2 = miArbol.insertar(libro2, "(id)");
 
-    miArbol.insertar(id1, "(1)");
-    miArbol.insertar(id2, "(2)");
+    // auto titulo1 = miArbol.insertar(libro1, "(titulo)");
+    // auto titulo2 = miArbol.insertar(libro2, "(titulo)");
 
-    miArbol.insertar(titulo1, "(Harry Potter 1)");
-    miArbol.insertar(titulo2, "(Harry Potter 2)");
+    // miArbol.insertar(id1, "(1)");
+    // miArbol.insertar(id2, "(2)");
+
+    // miArbol.insertar(titulo1, "(Harry Potter 1)");
+    // miArbol.insertar(titulo2, "(Harry Potter 2)");
 
     cout << "Tamaño: " << miArbol.size() << endl;
 

@@ -1,5 +1,5 @@
-#include <vector>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -28,7 +28,8 @@ public:
     bool isEmpty();
     int size();
 
-    string root();
+    //string raiz();
+    Nodo* raiz();
 
     int padre(int value);
     vector<string> hijos(string val);
@@ -41,4 +42,9 @@ public:
     vector<string> preOrder();
     vector<int> postOrder();
     vector<int> inOrder();
+
+
+    // Uso de string& para pasar una referencia al string original.
+    // Sin el &, se crearia una copia del string.
+    void insertarLibro(const string& archivo);
 };
