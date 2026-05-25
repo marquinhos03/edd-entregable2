@@ -15,13 +15,14 @@ private:
         Nodo(std::string data, Nodo* padre = nullptr);
     };
 
-    Nodo* rootNodo;
-    int treeSize;
-    int k;  // Número de hijos por cada nodo
+    Nodo* rootNodo;     // Nodo raíz del arbol
+    int treeSize;       // Tamaño del arbol
+    int k;              // Número de hijos por cada nodo
 
     void preOrder(Nodo* nodo, std::vector<std::string>& result);
-    void postOrder(Nodo* nodo, std::vector<int>& result);
-    void deleteSubtree(Nodo); //si se borra un nodo, se borran todos sus hijos y luego ese nodo.
+    void postOrder(Nodo* nodo, std::vector<std::string>& result);
+    void inOrder(Nodo* nodo, std::vector<std::string>& result);
+    void deleteSubtree(Nodo* nodo); //si se borra un nodo, se borran todos sus hijos y luego ese nodo.
 
 public:
     Arbol(int k);
@@ -29,20 +30,19 @@ public:
     bool isEmpty();
     int size();
 
-    //string raiz();
-    Nodo* raiz();
+    std::string root();
 
-    int padre(int value);
+    std::string padre(std::string data);
     std::vector<std::string> hijos(std::string data);
 
     Nodo* insertar(Nodo* padre, std::string data);
-    bool remover(int value);
+    bool remover(std::string data);
     
     Nodo* buscar(Nodo* nodo, std::string data);
 
     std::vector<std::string> preOrder();
-    std::vector<int> postOrder();
-    std::vector<int> inOrder();
+    std::vector<std::string> postOrder();
+    std::vector<std::string> inOrder();
 
 
     // Uso de string& para pasar una referencia al string original.

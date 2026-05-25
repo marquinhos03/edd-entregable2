@@ -30,17 +30,12 @@ int Arbol::size() {
 }
 
 /**
- * @brief Retorna el nodo ráíz del arbol
+ * @brief Retorna el dato almacenado del nodo ráíz del arbol
  */
-Arbol::Nodo* Arbol::raiz() {
+string Arbol::root() {
     if (!rootNodo) throw runtime_error("Arbol vacío");
-    return rootNodo;
+    return rootNodo->m_data;
 }
-
- // string Arbol::raiz() {
-//     if (!rootNodo) throw runtime_error("Arbol vacío");
-//     return rootNodo->m_data;
-// }
 
 Arbol::Nodo* Arbol::buscar(Nodo* nodo, string data) {
     if (!nodo) return nullptr;
@@ -63,8 +58,7 @@ Arbol::Nodo* Arbol::insertar(Nodo* padre, string data) {
         return rootNodo;
     }
 
-    // Caso error: Si ya existe rootNodo y se envía padre = nullptr,
-    // se rechaza la inserción.
+    // Caso error: Si ya existe rootNodo y se envía padre = nullptr, se rechaza la inserción.
     if (!padre) return nullptr;
 
     // Caso éxito: Se realiza la inserción.
@@ -73,6 +67,14 @@ Arbol::Nodo* Arbol::insertar(Nodo* padre, string data) {
     treeSize++;
 
     return nuevoNodo;
+}
+
+string Arbol::padre(string data) {
+    Nodo* nodo = buscar(rootNodo, data);
+    //if (!nodo || !nodo->m_padre) throw runtime_error("No tiene padre");
+    if (!nodo || !nodo->m_padre) return "No tiene padre";
+
+    return nodo->m_padre->m_data;
 }
 
 /**
@@ -90,6 +92,40 @@ vector<string> Arbol::hijos(string data) {
     }
 
     return result;
+}
+
+void Arbol::deleteSubtree(Nodo* nodo) {
+    if (!nodo) return;
+    for (auto hijo : nodo->m_hijos) {
+        deleteSubtree(hijo);
+    }
+    delete nodo;
+}
+
+// Pregunta: ¿Es eficiente usar buscar()?
+// ¿Seria más eficiente pasar el nodo?
+bool Arbol::remover(string data) {
+    Nodo* nodo = buscar(rootNodo, data);
+    if (!nodo) return false;
+
+    if (nodo == rootNodo) {
+        deleteSubtree(rootNodo);
+        rootNodo = nullptr;
+        treeSize = 0;
+        return true;
+    }
+
+    Nodo* padre = nodo->m_padre;
+    auto& siblings = padre->m_hijos;
+
+    siblings.erase(
+        remove(siblings.begin(), siblings.end(), nodo),
+        siblings.end()
+    );
+
+    deleteSubtree(nodo);
+    treeSize--;
+    return true;
 }
 
 /**
@@ -110,28 +146,75 @@ vector<string> Arbol::preOrder() {
     return result;
 }
 
+/**
+ * @brief Método recursivo para recorrido postorder
+ */
+void Arbol::postOrder(Nodo* nodo, vector<string>& result) {
+    if (!nodo) return;
+    for (auto hijo : nodo->m_hijos) {
+        postOrder(hijo, result);
+    }
+    result.push_back(nodo->m_data);
+}
+
+vector<string> Arbol::postOrder() {
+    vector<string> result;
+    postOrder(rootNodo, result);
+    return result;
+}
+
+/**
+ * @brief Método recursivo privado para el recorrido inOrder
+ */
+void Arbol::inOrder(Nodo* nodo, vector<string>& result) {
+    if (!nodo) return;
+
+    int half = nodo->m_hijos.size() / 2;
+
+    for (int i = 0; i < half; i++) {
+        inOrder(nodo->m_hijos[i], result);
+    }
+
+    result.push_back(nodo->m_data);
+
+    for (size_t i = half; i < nodo->m_hijos.size(); i++) {
+        inOrder(nodo->m_hijos[i], result);
+    }
+}
+
+/**
+ * @brief Método público para imprimir el recorrido inOrder
+*/
+vector<string> Arbol::inOrder() {
+    vector<string> result;
+    inOrder(rootNodo, result);
+    return result;
+}
 
 
 void Arbol::insertarLibro(const string& archivo) {
     LectorXML archivoXML(archivo);
-    
-    auto libro = insertar(raiz(), archivo);
 
+    // Insertamos el libro como hijo de la raiz
+    auto libro = insertar(rootNodo, archivo);
+
+    // Insertamos nodos hijos del libro
     auto nodoId = insertar(libro, "ID");
     auto nodoTitulo = insertar(libro, "Título");
     auto nodoIsbn = insertar(libro, "ISBN");
     auto nodoPublicationYear = insertar(libro, "Año de publicación");
     auto nodoIdioma = insertar(libro, "Idioma");
-    //auto nodoDescripcion = insertar(libro, "Descripción");
+    auto nodoDescripcion = insertar(libro, "Descripción");
     auto nodoRatingPromedio = insertar(libro, "Rating promedio");
     auto nodoNumeroPaginas = insertar(libro, "Número de páginas");
 
+    // Insertamos datos del libro a los nodos correspondientes
     insertar(nodoId, archivoXML.getId());
     insertar(nodoTitulo, archivoXML.getTitulo());
     insertar(nodoIsbn, archivoXML.getIsbn());
     insertar(nodoPublicationYear, archivoXML.getPublicationYear());
     insertar(nodoIdioma, archivoXML.getIdioma());
-    //insertar(nodoDescripcion, archivoXML.getDescripcion());
+    insertar(nodoDescripcion, archivoXML.getDescripcion());
     insertar(nodoRatingPromedio, archivoXML.getRatingPromedio());
     insertar(nodoNumeroPaginas, archivoXML.getNumeroPaginas());
 }

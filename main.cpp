@@ -11,16 +11,15 @@ int main() {
     auto raiz = miArbol.insertar(nullptr, "Raíz Libros");
 
     miArbol.insertarLibro("1.xml");
-    miArbol.insertarLibro("2.xml");
+    //miArbol.insertarLibro("2.xml");
 
     cout << "Tamaño: " << miArbol.size() << endl;
 
-    cout << "PreOrder: ";
+    cout << "PreOrder: " << endl;
     for (string s : miArbol.preOrder()) {
-        cout << s << " ";
+        cout << s << endl;
     }
     cout << endl;
-
 
     return 0;
 }
