@@ -6,10 +6,23 @@ using namespace tinyxml2;
 
 LectorXML::LectorXML(const string& archivo) {
     XMLDocument doc;
-    doc.LoadFile(archivo.c_str());
+
+    // Manejo de errores proporcionado por Gemini
+
+    // Validar si el archivo realmente se pudo cargar/encontrar
+    if (doc.LoadFile(archivo.c_str()) != XML_SUCCESS) {
+        cout << "  -> [ERROR] No se pudo cargar o abrir el archivo: " << archivo << endl;
+        return; // Salimos del constructor anticipadamente
+    }
 
     // Acceso a la raiz
     XMLNode* root = doc.FirstChildElement("GoodreadsResponse");
+    // PROTECCIÓN CRÍTICA: Verificar si la etiqueta raíz existe
+    if (!root) {
+        cout << "  -> [ERROR] El archivo " << archivo << " no tiene la etiqueta raiz esperada." << endl;
+        return;
+    }
+
     // Acceso al hijo
     XMLElement* book = root->FirstChildElement("book");
 
@@ -24,15 +37,17 @@ LectorXML::LectorXML(const string& archivo) {
     XMLElement* num_pages = book->FirstChildElement("num_pages");
     XMLElement* similar_books = book->FirstChildElement("similar_books");
 
-    // Guardado de datos (contemplando que un .xml puede no contener ciertos datos)
-    m_id = id ? id->GetText() : "Desconocido";
-    m_titulo = title ? title->GetText() : "Desconocido";
-    m_isbn = isbn ? isbn->GetText() : "Desconocido";
-    m_publication_year = publication_year ? publication_year->GetText() : "Desconocido";
-    m_idioma = language_code ? language_code->GetText() : "Desconocido";
-    m_descripcion = description ? description->GetText() : "Desconocido";
-    m_rating_promedio = average_rating ? average_rating->GetText() : "Desconocido";
-    m_numero_paginas = num_pages ? num_pages->GetText() : "Desconocido";
+    // Guardado de datos (verificando que en cada <tag> haya datos almacenados)
+    // NOTA: si un <tag> no tiene información, se arrojaría "Segmentation fault (core dumped)"
+
+    m_id = (id && id->GetText()) ? id->GetText() : "Desconocido";
+    m_titulo = (title && title->GetText()) ? title->GetText() : "Desconocido";
+    m_isbn = (isbn && isbn->GetText()) ? isbn->GetText() : "Desconocido";
+    m_publication_year = (publication_year && publication_year->GetText()) ? publication_year->GetText() : "Desconocido";
+    m_idioma = (language_code && language_code->GetText()) ? language_code->GetText() : "Desconocido";
+    m_descripcion = (description && description->GetText()) ? description->GetText() : "Desconocido";
+    m_rating_promedio = (average_rating && average_rating->GetText()) ? average_rating->GetText() : "Desconocido";
+    m_numero_paginas = (num_pages && num_pages->GetText()) ? num_pages->GetText() : "Desconocido";
 
     if (similar_books) {
         // Acceso al primer hijo <book> de <similar_books>
