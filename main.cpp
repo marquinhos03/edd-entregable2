@@ -2,6 +2,8 @@
 // Ejecucion: ./a.out (En windows .\a.exe)
 #include <iostream>
 #include <filesystem>
+#include <vector>
+#include <algorithm>
 #include "arbol.hpp"
 
 namespace fs = std::filesystem;
@@ -17,31 +19,33 @@ int main() {
 
     cout << "Iniciando la construccion del arbol..." << endl;
 
-    // miArbol.insertarLibro("books_xml/1.xml");
-    // miArbol.insertarLibro("books_xml/2.xml");
-    // miArbol.insertarLibro("books_xml/3.xml");
-    // miArbol.insertarLibro("books_xml/5.xml");
-    // miArbol.insertarLibro("books_xml/6.xml");
-    // miArbol.insertarLibro("books_xml/8.xml");
-    // miArbol.insertarLibro("books_xml/10.xml");
-    // miArbol.insertarLibro("books_xml/11.xml");
-    // miArbol.insertarLibro("books_xml/13.xml");
+    // 1. Crear un vector para almacenar las rutas de los archivos
+    vector<fs::path> archivos;
 
-    // Iteramos sobre todos los archivos del directorio
+    // 2. Leer todos los archivos válidos y guardarlos en el vector
     for (const auto& entry : fs::directory_iterator(directorio)) {
-        // Verificamos que sea un archivo regular y tenga extensión .xml
         if (entry.is_regular_file() && entry.path().extension() == ".xml") {
-            try {
-                miArbol.insertarLibro(entry.path().string());
-                contador_libros++;
+            archivos.push_back(entry.path());
+        }
+    }
 
-                // Imprimir progreso cada 500 archivos para monitorear el rendimiento
-                if (contador_libros % 500 == 0) {
-                    cout << "Procesados " << contador_libros << " libros..." << endl;
-                }
-            } catch (const exception& e) {
-                cerr << "Error procesando " << entry.path().string() << ": " << e.what() << endl;
+    // 3. Ordenar el vector de forma numérica según el nombre del archivo
+    sort(archivos.begin(), archivos.end(), [](const fs::path& a, const fs::path& b) {
+        return stoi(a.stem().string()) < stoi(b.stem().string());
+    });
+
+    // 4. Iterar sobre el vector ya ordenado para insertarlos en el árbol
+    for (const auto& ruta : archivos) {
+        try {
+            miArbol.insertarLibro(ruta.string());
+            contador_libros++;
+
+            // Imprimir progreso cada 10 archivos para monitorear el rendimiento
+            if (contador_libros % 10 == 0) {
+                cout << "Procesados " << contador_libros << " libros..." << endl;
             }
+        } catch (const exception& e) {
+            cerr << "Error procesando " << ruta.string() << ": " << e.what() << endl;
         }
     }
 
@@ -49,17 +53,11 @@ int main() {
     cout << "Total de libros procesados: " << contador_libros << endl;
     cout << "Cantidad total de nodos en el arbol: " << miArbol.size() << endl;
 
-    // cout << "PreOrder: " << endl;
-    // for (string s : miArbol.preOrder()) {
-    //     cout << s << endl;
-    // }
-    // cout << endl;
-
     cout << "Llamada a función listar() ..." << endl;
     for (int i : miArbol.listar()) {
         cout << i << " ";
     }
-    cout << endl;
+        cout << endl;
 
     return 0;
 }
