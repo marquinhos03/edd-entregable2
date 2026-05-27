@@ -48,6 +48,11 @@ public:
     // Uso de string& para pasar una referencia al string original.
     // Sin el &, se crearia una copia del string.
     void insertarLibro(const std::string& archivo);
+
+    // Funciones a implementar
+    std::vector<int> listar();
+    // borrar_ratings(r);
+    // precursores();
 };
 
 #endif

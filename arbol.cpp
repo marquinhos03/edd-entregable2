@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <stdexcept>
+
 using namespace std;
 
 // Nodo
@@ -184,7 +186,7 @@ void Arbol::inOrder(Nodo* nodo, vector<string>& result) {
 
 /**
  * @brief Método público para imprimir el recorrido inOrder
-*/
+ */
 vector<string> Arbol::inOrder() {
     vector<string> result;
     inOrder(rootNodo, result);
@@ -197,6 +199,9 @@ void Arbol::insertarLibro(const string& archivo) {
 
     // Insertamos el libro como hijo de la raiz
     auto nodoLibro = insertar(rootNodo, archivo);
+
+    // DEBUG
+    cout << "Se está insertando " << archivo << endl;
 
     // Insertamos nodos hijos del libro
     auto nodoId = insertar(nodoLibro, "ID");
@@ -237,4 +242,29 @@ void Arbol::insertarLibro(const string& archivo) {
 
         contador++;
     }
+}
+
+/**
+ * @brief Listar los IDs de los libros siguiendo un recorrido preorder.
+ *
+ * Realiza un recorrido PreOrder buscando los nodos cuyo padre sea 'ID', en caso de encontrarlo,
+ * guarda su valor como tipo entero.
+ * @return vector<int> Un vector con los IDs de los libros.
+ */
+vector<int> Arbol::listar() {
+    // result guardará los IDs
+    vector<int> result;
+
+    // Hacemos el recorrido PreOrder
+    for (string s : preOrder()) {
+        string str1 = padre(s);
+
+        // Si el padre de 's' es 'ID', entonces 's' tiene almacenado el id de algun libro
+        if (str1.compare("ID") == 0) {
+            int id = stoi(s);
+            result.push_back(id);
+        }
+    }
+
+    return result;
 }
