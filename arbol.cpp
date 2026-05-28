@@ -37,6 +37,12 @@ string Arbol::root() {
     return rootNodo->m_data;
 }
 
+/**
+ * @brief Método que busca recursivamente un nodo que coincida con el dato especificado.
+ * @param nodo El nodo desde donde comienza la búsqueda (usualmente la raiz).
+ * @param data El string exacto 'm_data' del nodo que queremos encontrar.
+ * @return Puntero al nodo encontrado, o nullptr si no existe en la rama.
+ */
 Arbol::Nodo* Arbol::buscar(Nodo* nodo, string data) {
     if (!nodo) return nullptr;
 
