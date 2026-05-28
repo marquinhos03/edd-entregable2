@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <functional>
 
-#include <stdexcept>
-
 using namespace std;
 
 // Nodo
@@ -201,7 +199,7 @@ void Arbol::insertarLibro(const string& archivo) {
     auto nodoLibro = insertar(rootNodo, archivo);
 
     // DEBUG
-    cout << "Se está insertando " << archivo << endl;
+    // cout << "Se está insertando " << archivo << endl;
 
     // Insertamos nodos hijos del libro
     auto nodoId = insertar(nodoLibro, "ID");
