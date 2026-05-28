@@ -272,3 +272,14 @@ vector<int> Arbol::listar() {
 
     return result;
 }
+
+/**
+ *
+ * @return vector<int> Un vector con los IDs de libros
+ */
+vector<int> Arbol::precursores() {
+    vector<int> result;
+
+    // Usar funcion listar()?
+
+}

@@ -52,7 +52,7 @@ public:
     // Funciones a implementar
     std::vector<int> listar();
     // borrar_ratings(r);
-    // precursores();
+    std::vector<int> precursores();
 };
 
 #endif
