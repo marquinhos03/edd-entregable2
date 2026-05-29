@@ -339,3 +339,45 @@ vector<int> Arbol::precursores() {
 
     return result;
 }
+
+/**
+ * @brief Elimina del árbol todos los libros con un rating promedio menor o igual a r.
+ * @param r El valor máximo de rating para que un libro sea eliminado.
+ */
+void Arbol::borrar_ratings(float r) {
+    if (!rootNodo || rootNodo->m_hijos.empty()) return;
+
+    auto& libros = rootNodo->m_hijos;
+
+    // Iteramos de atrás hacia adelante para poder eliminar elementos del vector de forma segura
+    for (int i = libros.size() - 1; i >= 0; --i) {
+        Nodo* nodo_libro = libros[i];
+
+        // Buscamos el nodo que almacena el rating
+        Nodo* nodo_rating = buscar(nodo_libro, "Rating promedio");
+
+        // Verificamos que el nodo exista y tenga un hijo con el dato numérico
+        if (nodo_rating && !nodo_rating->m_hijos.empty()) {
+            string string_rating = nodo_rating->m_hijos[0]->m_data;
+
+            // Ignoramos los libros que no tienen registro del rating
+            if (string_rating != "Desconocido") {
+                // Convertimos el string a float para la comparación
+                float rating_actual = stof(string_rating);
+
+                if (rating_actual <= r) {
+                    // 1. Borramos todos los nodos descendientes y el nodo del libro
+                    deleteSubtree(nodo_libro);
+                    
+                    // 2. Lo quitamos del vector de hijos de la raíz
+                    libros.erase(libros.begin() + i);
+                    
+                    // 3. Ajustamos el contador del árbol
+                    // Nota: Si quieres que treeSize sea exacto, deberías restar 
+                    // la cantidad total de nodos que conformaban este libro.
+                    treeSize--; 
+                }
+            }
+        }
+    }
+}

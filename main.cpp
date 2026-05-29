@@ -53,13 +53,35 @@ int main() {
     cout << "Total de libros procesados: " << contador_libros << endl;
     cout << "Cantidad total de nodos en el arbol: " << miArbol.size() << endl;
 
-    cout << "Llamada a función listar() ..." << endl;
+    cout << "Llamada a funcion listar() ..." << endl;
     for (int i : miArbol.listar()) {
         cout << i << " ";
     }
     cout << endl;
 
     cout << "Llamada a funcion precursores() ..." << endl;
+    for (int i : miArbol.precursores()) {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    // Definimos un rating límite para borrar (ej. menor o igual a 4.1)
+    float rating_limite = 4.1f; 
+    cout << "Lamada a funcion borrar_ratings(" << rating_limite << ") ===" << endl;
+    cout << "Eliminando libros con rating promedio menor o igual a " << rating_limite << "..." << endl;
+    
+    miArbol.borrar_ratings(rating_limite);
+
+    cout << "\n=== ESTADO DEL ARBOL POST-BORRADO ===" << endl;
+    cout << "Cantidad total de nodos restantes en el arbol: " << miArbol.size() << endl;
+    
+    cout << "Libros que quedaron en el arbol (listar()):" << endl;
+    for (int i : miArbol.listar()) {
+        cout << i << " ";
+    }
+    cout << endl;
+
+    cout << "Nuevos precursores calculados:" << endl;
     for (int i : miArbol.precursores()) {
         cout << i << " ";
     }

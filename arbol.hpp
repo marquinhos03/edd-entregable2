@@ -55,7 +55,7 @@ public:
     // Funciones a implementar
     
     std::vector<int> listar();
-    // borrar_ratings(r);
+    void borrar_ratings(float r);
     std::vector<int> precursores();
 };
 
