@@ -273,6 +273,7 @@ vector<int> Arbol::listar() {
     return result;
 }
 
+
 /**
  *
  * @return vector<int> Un vector con los IDs de libros
@@ -280,6 +281,33 @@ vector<int> Arbol::listar() {
 vector<int> Arbol::precursores() {
     vector<int> result;
 
-    // Usar funcion listar()?
+    for (auto nodoLibro : rootNodo->m_hijos) {
+        // PY: PublicationYear
+        auto nodoPY = buscar(nodoLibro, "Año de publicación");
+        string hojaDePY = nodoPY->m_hijos[0]->m_data;
 
+        if (hojaDePY == "Desconocido") continue;
+
+        auto nodoSimilares = buscar(nodoLibro, "Libros similares");
+
+        bool esPrecursor = true;
+        for (auto nodoSimilar : nodoSimilares->m_hijos) {
+            auto nodoPYSimilar = buscar(nodoSimilar, "Año de publicación");
+            string hojaDePYSimilar = nodoPYSimilar->m_hijos[0]->m_data;
+
+            if (hojaDePYSimilar == "Desconocido") continue;
+            if (stoi(hojaDePYSimilar) <= stoi(hojaDePY)) {
+                esPrecursor = false;
+                break;
+            }
+        }
+
+        if (esPrecursor) {
+            auto nodoID = buscar(nodoLibro, "ID");
+            string hojaDeID = nodoID->m_hijos[0]->m_data;
+            result.push_back(stoi(hojaDeID));
+        }
+    }
+
+    return result;
 }

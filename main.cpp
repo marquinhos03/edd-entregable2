@@ -57,7 +57,13 @@ int main() {
     for (int i : miArbol.listar()) {
         cout << i << " ";
     }
-        cout << endl;
+    cout << endl;
+
+    cout << "Llamada a funcion precursores() ..." << endl;
+    for (int i : miArbol.precursores()) {
+        cout << i << " ";
+    }
+    cout << endl;
 
     return 0;
 }

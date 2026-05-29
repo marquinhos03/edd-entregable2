@@ -49,6 +49,7 @@ public:
     // Sin el &, se crearia una copia del string.
     void insertarLibro(const std::string& archivo);
 
+
     // Funciones a implementar
     std::vector<int> listar();
     // borrar_ratings(r);
