@@ -24,6 +24,8 @@ private:
     void inOrder(Nodo* nodo, std::vector<std::string>& result);
     void deleteSubtree(Nodo* nodo); //si se borra un nodo, se borran todos sus hijos y luego ese nodo.
 
+    void listarPreOrder(Nodo* nodo, std::vector<int>& result);
+
 public:
     Arbol(int k);
 
@@ -51,6 +53,7 @@ public:
 
 
     // Funciones a implementar
+    
     std::vector<int> listar();
     // borrar_ratings(r);
     std::vector<int> precursores();

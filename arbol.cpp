@@ -249,31 +249,42 @@ void Arbol::insertarLibro(const string& archivo) {
 }
 
 /**
- * @brief Listar los IDs de los libros siguiendo un recorrido preorder.
+ * @brief Método recursivo privado para listar los IDs siguiendo un recorrido preOrder.
  *
- * Realiza un recorrido PreOrder buscando los nodos cuyo padre sea 'ID', en caso de encontrarlo,
- * guarda su valor como tipo entero.
+ * Recorre el árbol verificando si el "padre" del "nodo" actual tiene el tag "ID".
+ * Si lo anterior se cumple, guarda el dato almacenado (el id) del "nodo" actual como tipo entero
+ *
+ * @param nodo Puntero al nodo actual en la llamada recursiva.
+ * @param result Referencia al vector que guarda los IDs de los libros.
+ */
+void Arbol::listarPreOrder(Nodo* nodo, vector<int>& result) {
+    if (!nodo) return;
+
+    // Validacion que toma O(1)
+    if (nodo->m_padre != nullptr && nodo->m_padre->m_data == "ID") {
+        result.push_back(stoi(nodo->m_data));
+    }
+
+    for (auto hijo : nodo->m_hijos) {
+        listarPreOrder(hijo, result);
+    }
+}
+
+/**
+ * @brief Listar los IDs de los libros siguiendo un recorrido preOrder.
+ *
+ * Realiza un recorrido recursivo desde la raiz del árbol para encontrar y almacenar las hojas que almacenan
+ * el "id" de un libro.
+ *
+ * Lo anterior toma complejidad O(n), donde n es el tamaño del arbol.
  *
  * @return vector<int> Un vector con los IDs de los libros.
  */
 vector<int> Arbol::listar() {
-    // result guardará los IDs
     vector<int> result;
-
-    // Hacemos el recorrido PreOrder
-    for (string s : preOrder()) {
-        string str1 = padre(s);
-
-        // Si el padre de 's' es 'ID', entonces 's' tiene almacenado el id de algun libro
-        if (str1.compare("ID") == 0) {
-            int id = stoi(s);
-            result.push_back(id);
-        }
-    }
-
+    listarPreOrder(rootNodo, result);
     return result;
 }
-
 
 /**
  * @brief Listar los IDs de libros que sólo tengan libros similares publicados en años posteriores.
