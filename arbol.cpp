@@ -253,6 +253,7 @@ void Arbol::insertarLibro(const string& archivo) {
  *
  * Realiza un recorrido PreOrder buscando los nodos cuyo padre sea 'ID', en caso de encontrarlo,
  * guarda su valor como tipo entero.
+ *
  * @return vector<int> Un vector con los IDs de los libros.
  */
 vector<int> Arbol::listar() {
@@ -275,37 +276,53 @@ vector<int> Arbol::listar() {
 
 
 /**
+ * @brief Listar los IDs de libros que sólo tengan libros similares publicados en años posteriores.
  *
- * @return vector<int> Un vector con los IDs de libros
+ * Se evalúa cada libro/archivo ".xml" en el árbol comparando su año de publicación
+ * con el de sus libros similares. Si el año de publicación del libro o de un libro 
+ * similar es "Desconocido", dicho libro no es considerado para la validación.
+ *
+ * @return vector<int> Un vector con los IDs de los libros precursores
  */
 vector<int> Arbol::precursores() {
     vector<int> result;
 
-    for (auto nodoLibro : rootNodo->m_hijos) {
-        // PY: PublicationYear
-        auto nodoPY = buscar(nodoLibro, "Año de publicación");
-        string hojaDePY = nodoPY->m_hijos[0]->m_data;
+    // Iteramos sobre cada 'libro/xml' del arbol
+    for (auto nodo_libro : rootNodo->m_hijos) {
+        // Buscamos la hoja que tiene guardado el año de publicacion del libro
+        auto nodo_py = buscar(nodo_libro, "Año de publicación");
+        string hoja_de_py = nodo_py->m_hijos[0]->m_data;
 
-        if (hojaDePY == "Desconocido") continue;
+        // Si no hay registro del año de publicacion, pasamos al sig. 'libro/xml'
+        if (hoja_de_py == "Desconocido") continue;
 
-        auto nodoSimilares = buscar(nodoLibro, "Libros similares");
-
+        auto nodo_similares = buscar(nodo_libro, "Libros similares");
+        // flag para luego determinar si agregamos o no el id a 'result'
         bool esPrecursor = true;
-        for (auto nodoSimilar : nodoSimilares->m_hijos) {
-            auto nodoPYSimilar = buscar(nodoSimilar, "Año de publicación");
-            string hojaDePYSimilar = nodoPYSimilar->m_hijos[0]->m_data;
 
-            if (hojaDePYSimilar == "Desconocido") continue;
-            if (stoi(hojaDePYSimilar) <= stoi(hojaDePY)) {
+        // Iteramos sobre cada 'libro similar' en 'libros similares'
+        for (auto nodo_similar : nodo_similares->m_hijos) {
+            // Buscamos la hoja que tiene guardado el año de publicacion del libro similar
+            auto nodo_py_similar = buscar(nodo_similar, "Año de publicación");
+            string hoja_de_py_similar = nodo_py_similar->m_hijos[0]->m_data;
+
+            // Si no hay registro del año de publicacion, pasamos al sig. 'libro similar'
+            if (hoja_de_py_similar == "Desconocido") continue;
+
+            // Si el 'año de publicación' del 'libro similar' es menor o igual al 'año de publicación' del 'libro',
+            // entonces 'libro similar' no es posterior a 'libro', y salimos del bucle de 'libros similares'.
+                if (stoi(hoja_de_py_similar) <= stoi(hoja_de_py)) {
                 esPrecursor = false;
                 break;
             }
         }
 
+        // Si esPrecursor = true, entonces guardamos el 'id' del 'libro/xml' en 'result'
+        // En caso contrario, no hacemos nada y pasamos al sig. 'libro/xml'
         if (esPrecursor) {
-            auto nodoID = buscar(nodoLibro, "ID");
-            string hojaDeID = nodoID->m_hijos[0]->m_data;
-            result.push_back(stoi(hojaDeID));
+            auto nodo_id = buscar(nodo_libro, "ID");
+            string hoja_de_id = nodo_id->m_hijos[0]->m_data;
+            result.push_back(stoi(hoja_de_id));
         }
     }
 
