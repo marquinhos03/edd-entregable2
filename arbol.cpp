@@ -5,14 +5,16 @@
 
 using namespace std;
 
-// Nodo
+/**
+ * @brief Método constructor de un nodo
+ */
 Arbol::Nodo::Nodo(string data, Nodo* padre) {
     m_data = data;
     m_padre = padre;
 }
 
 /**
- * @brief Constructor
+ * @brief Método constructor del árbol
  * @param k Número de hijos por nodo
  */
 Arbol::Arbol(int k) {
@@ -29,9 +31,6 @@ int Arbol::size() {
     return treeSize;
 }
 
-/**
- * @brief Retorna el dato almacenado del nodo ráíz del arbol
- */
 string Arbol::root() {
     if (!rootNodo) throw runtime_error("Arbol vacío");
     return rootNodo->m_data;
@@ -39,8 +38,10 @@ string Arbol::root() {
 
 /**
  * @brief Método que busca recursivamente un nodo que coincida con el dato especificado.
+ *
  * @param nodo El nodo desde donde comienza la búsqueda (usualmente la raiz).
  * @param data El string exacto 'm_data' del nodo que queremos encontrar.
+ *
  * @return Puntero al nodo encontrado, o nullptr si no existe en la rama.
  */
 Arbol::Nodo* Arbol::buscar(Nodo* nodo, string data) {
@@ -100,16 +101,22 @@ vector<string> Arbol::hijos(string data) {
     return result;
 }
 
+/**
+ * @brief Método auxiliar.
+ *
+ * Se encarga de la lógica recursiva para eliminar un subárbol.
+ *
+ * @param nodo Puntero al nodo raíz del subárbol a eliminar.
+ */
 void Arbol::deleteSubtree(Nodo* nodo) {
     if (!nodo) return;
+    // La eliminación sigue un recorrido postOrder
     for (auto hijo : nodo->m_hijos) {
         deleteSubtree(hijo);
     }
     delete nodo;
 }
 
-// Pregunta: ¿Es eficiente usar buscar()?
-// ¿Seria más eficiente pasar el nodo?
 bool Arbol::remover(string data) {
     Nodo* nodo = buscar(rootNodo, data);
     if (!nodo) return false;
@@ -135,7 +142,12 @@ bool Arbol::remover(string data) {
 }
 
 /**
- * @brief Método recursivo para recorrido preorder
+ * @brief Método auxiliar.
+ *
+ * Se encarga de la lógica recursiva del recorrido preOrder del árbol.
+ *
+ * @param nodo Puntero al nodo actual que se está visitando en la recursión.
+ * @param result Referencia al vector de strings que guarda el recorrido.
  */
 void Arbol::preOrder(Nodo* nodo, vector<string>& result) {
     if (!nodo) return;
@@ -146,6 +158,13 @@ void Arbol::preOrder(Nodo* nodo, vector<string>& result) {
     }
 }
 
+/**
+ * @brief Realiza un recorrido preOrder a todo el árbol.
+ *
+ * Recorre el árbol llamando a la función recursiva, iniciando en el nodo raíz.
+ * 
+ * @return vector<string> Un vector con los (m_data) de todos los nodos en orden preOrder.
+ */
 vector<string> Arbol::preOrder() {
     vector<string> result;
     preOrder(rootNodo, result);
@@ -153,7 +172,12 @@ vector<string> Arbol::preOrder() {
 }
 
 /**
- * @brief Método recursivo para recorrido postorder
+ * @brief Método auxiliar.
+ *
+ * Se encarga de la lógica recusriva del recorrido postOrder del árbol.
+ *
+ * @param nodo Puntero al nodo actual que se está visitando en la recursión.
+ * @param result Referencia al vector de string que guarda el recorrido.
  */
 void Arbol::postOrder(Nodo* nodo, vector<string>& result) {
     if (!nodo) return;
@@ -163,6 +187,9 @@ void Arbol::postOrder(Nodo* nodo, vector<string>& result) {
     result.push_back(nodo->m_data);
 }
 
+/**
+ * @brief Realiza un recorrido postOrder a todo el árbol.
+ */
 vector<string> Arbol::postOrder() {
     vector<string> result;
     postOrder(rootNodo, result);
@@ -170,7 +197,12 @@ vector<string> Arbol::postOrder() {
 }
 
 /**
- * @brief Método recursivo privado para el recorrido inOrder
+ * @brief Método auxiliar.
+ *
+ * Se encarga de la lógica recusriva del recorrido inOrder del árbol.
+ *
+ * @param nodo Puntero al nodo actual que se está visitando en la recursión.
+ * @param result Referencia al vector de string que guarda el recorrido.
  */
 void Arbol::inOrder(Nodo* nodo, vector<string>& result) {
     if (!nodo) return;
@@ -189,7 +221,7 @@ void Arbol::inOrder(Nodo* nodo, vector<string>& result) {
 }
 
 /**
- * @brief Método público para imprimir el recorrido inOrder
+ * @brief Realiza un recorrido inOrder a todo el árbol.
  */
 vector<string> Arbol::inOrder() {
     vector<string> result;
@@ -197,15 +229,16 @@ vector<string> Arbol::inOrder() {
     return result;
 }
 
-
+/**
+ * @brief Método para insertar un libro/archivo.xml al árbol.
+ *
+ * @param archivo Referencia al string que contiene el nombre del archivo.xml (ej. "1.xml") a insertar.
+ */
 void Arbol::insertarLibro(const string& archivo) {
     LectorXML archivoXML(archivo);
 
     // Insertamos el libro como hijo de la raiz
     auto nodoLibro = insertar(rootNodo, archivo);
-
-    // DEBUG
-    // cout << "Se está insertando " << archivo << endl;
 
     // Insertamos nodos hijos del libro
     auto nodoId = insertar(nodoLibro, "ID");
@@ -227,7 +260,6 @@ void Arbol::insertarLibro(const string& archivo) {
     insertar(nodoDescripcion, archivoXML.getDescripcion());
     insertar(nodoRatingPromedio, archivoXML.getRatingPromedio());
     insertar(nodoNumeroPaginas, archivoXML.getNumeroPaginas());
-    //insertar(nodoLibrosSimilares, archivoXML.getLibrosSimilares());
 
     // Insertamos libros similares
     vector<LibroSimilar> librosSim = archivoXML.getLibrosSimilares();
@@ -249,10 +281,9 @@ void Arbol::insertarLibro(const string& archivo) {
 }
 
 /**
- * @brief Método recursivo privado para listar los IDs siguiendo un recorrido preOrder.
+ * @brief Método auxiliar.
  *
- * Recorre el árbol verificando si el "padre" del "nodo" actual tiene el tag "ID".
- * Si lo anterior se cumple, guarda el dato almacenado (el id) del "nodo" actual como tipo entero
+ * Se encarga de la lógica recursiva para listar los IDs siguiendo un recorrido preOrder.
  *
  * @param nodo Puntero al nodo actual en la llamada recursiva.
  * @param result Referencia al vector que guarda los IDs de los libros.
@@ -261,6 +292,8 @@ void Arbol::listarPreOrder(Nodo* nodo, vector<int>& result) {
     if (!nodo) return;
 
     // Validacion que toma O(1)
+    // Si el padre del nodo actual tiene el tag "ID", entonces
+    // guardamos el dato almacenado (el id) del nodo actual como tipo entero.
     if (nodo->m_padre != nullptr && nodo->m_padre->m_data == "ID") {
         result.push_back(stoi(nodo->m_data));
     }
@@ -271,10 +304,10 @@ void Arbol::listarPreOrder(Nodo* nodo, vector<int>& result) {
 }
 
 /**
- * @brief Listar los IDs de los libros siguiendo un recorrido preOrder.
+ * @brief Lista los IDs de los libros siguiendo un recorrido preOrder.
  *
- * Realiza un recorrido recursivo desde la raiz del árbol para encontrar y almacenar las hojas que almacenan
- * el "id" de un libro.
+ * Recorre el árbol llamando a la función recursiva, iniciando en el nodo raíz para encontrar
+ * y guardar el "id" de cada libro.
  *
  * Lo anterior toma complejidad O(n), donde n es el tamaño del arbol.
  *

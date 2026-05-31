@@ -46,11 +46,7 @@ public:
     std::vector<std::string> postOrder();
     std::vector<std::string> inOrder();
 
-
-    // Uso de string& para pasar una referencia al string original.
-    // Sin el &, se crearia una copia del string.
     void insertarLibro(const std::string& archivo);
-
 
     // Funciones a implementar
     
