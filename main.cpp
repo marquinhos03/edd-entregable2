@@ -41,10 +41,10 @@ int main() {
         //cout << "Se esta insertando " << archivo.string() << endl;
         miArbol.insertarLibro(archivo.string());
         contador_libros++;
-        
-        // Imprimir progreso cada 10 archivos para monitorear el rendimiento
-        if (contador_libros % 10 == 0) {
-            cout << "Procesados " << contador_libros << " libros ..." << endl;
+
+        // Imprimir progreso cada 1000 archivos para monitorear el rendimiento
+        if (contador_libros % 1000 == 0) {
+            cout << "Insertados " << contador_libros << " libros ..." << endl;
         }
     }
     cout << endl;
