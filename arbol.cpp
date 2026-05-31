@@ -115,6 +115,8 @@ void Arbol::deleteSubtree(Nodo* nodo) {
         deleteSubtree(hijo);
     }
     delete nodo;
+    // Actualizar el tamaño del árbol por cada nodo eliminado.
+    treeSize--;
 }
 
 bool Arbol::remover(string data) {
@@ -392,6 +394,7 @@ void Arbol::borrar_ratings(float r) {
         // Verificamos que el nodo exista y tenga un hijo con el dato numérico
         if (nodo_rating && !nodo_rating->m_hijos.empty()) {
             string string_rating = nodo_rating->m_hijos[0]->m_data;
+            cout << string_rating << endl;
 
             // Ignoramos los libros que no tienen registro del rating
             if (string_rating != "Desconocido") {
@@ -404,11 +407,6 @@ void Arbol::borrar_ratings(float r) {
                     
                     // 2. Lo quitamos del vector de hijos de la raíz
                     libros.erase(libros.begin() + i);
-                    
-                    // 3. Ajustamos el contador del árbol
-                    // Nota: Si quieres que treeSize sea exacto, deberías restar 
-                    // la cantidad total de nodos que conformaban este libro.
-                    treeSize--; 
                 }
             }
         }
