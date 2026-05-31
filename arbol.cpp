@@ -394,7 +394,6 @@ void Arbol::borrar_ratings(float r) {
         // Verificamos que el nodo exista y tenga un hijo con el dato numérico
         if (nodo_rating && !nodo_rating->m_hijos.empty()) {
             string string_rating = nodo_rating->m_hijos[0]->m_data;
-            cout << string_rating << endl;
 
             // Ignoramos los libros que no tienen registro del rating
             if (string_rating != "Desconocido") {

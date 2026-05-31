@@ -11,78 +11,76 @@ using namespace std;
 
 int main() {
     // Inicializamos el árbol
-    Arbol miArbol(1000); 
+    Arbol miArbol(1000);
     auto raiz = miArbol.insertar(nullptr, "Raiz Libros");
 
-    string directorio = "books_xml"; 
+    // GENERADO CON GEMINI
+
+    string dir = "books_xml";
+    vector<fs::path> archivos;
     int contador_libros = 0;
 
-    cout << "Iniciando la construccion del arbol..." << endl;
-
-    // 1. Crear un vector para almacenar las rutas de los archivos
-    vector<fs::path> archivos;
-
-    // 2. Leer todos los archivos válidos y guardarlos en el vector
-    for (const auto& entry : fs::directory_iterator(directorio)) {
+    // 1. Recopilar todos los archivos .xml
+    for (const auto& entry : fs::directory_iterator(dir)) {
         if (entry.is_regular_file() && entry.path().extension() == ".xml") {
             archivos.push_back(entry.path());
         }
     }
 
-    // 3. Ordenar el vector de forma numérica según el nombre del archivo
+    // 2. Ordenar numéricamente (1, 2, 3... 10, 11)
     sort(archivos.begin(), archivos.end(), [](const fs::path& a, const fs::path& b) {
-        return stoi(a.stem().string()) < stoi(b.stem().string());
+        // .stem() obtiene el nombre sin extensión (ej. "10" en lugar de "10.xml")
+        int numA = stoi(a.stem().string());
+        int numB = stoi(b.stem().string());
+        return numA < numB;
     });
 
-    // 4. Iterar sobre el vector ya ordenado para insertarlos en el árbol
-    for (const auto& ruta : archivos) {
-        try {
-            miArbol.insertarLibro(ruta.string());
-            contador_libros++;
-
-            // Imprimir progreso cada 10 archivos para monitorear el rendimiento
-            if (contador_libros % 10 == 0) {
-                cout << "Procesados " << contador_libros << " libros..." << endl;
-            }
-        } catch (const exception& e) {
-            cerr << "Error procesando " << ruta.string() << ": " << e.what() << endl;
+    // 3. Procesar en orden
+    cout << "INICIANDO LA CONSTRUCCIÓN DEL ÁRBOL" << endl;
+    for (const auto& archivo : archivos) {
+        //cout << "Se esta insertando " << archivo.string() << endl;
+        miArbol.insertarLibro(archivo.string());
+        contador_libros++;
+        
+        // Imprimir progreso cada 10 archivos para monitorear el rendimiento
+        if (contador_libros % 10 == 0) {
+            cout << "Procesados " << contador_libros << " libros ..." << endl;
         }
-    }
-
-    cout << "\nArbol construido con exito" << endl;
-    cout << "Total de libros procesados: " << contador_libros << endl;
-    cout << "Cantidad total de nodos en el arbol: " << miArbol.size() << endl;
-
-    cout << "Llamada a funcion listar() ..." << endl;
-    for (int i : miArbol.listar()) {
-        cout << i << " ";
     }
     cout << endl;
 
+    // FIN GENERADO CON GEMINI
+
+    cout << "ÁRBOL CONSTRUIDO CON ÉXITO " << endl;
+    cout << "Total de libros procesados: " << contador_libros << endl;
+    cout << "Total de nodos en el árbol: " << miArbol.size() << endl;
+    cout << endl;
+
+    // FUNCIÓN LISTAR
+    cout << "Llamada a función listar() ..." << endl;
+    for (int i : miArbol.listar()) {
+        cout << i << " ";
+    }
+    cout << endl << endl;
+
+    // FUNCIÓN PRECURSORES
     cout << "Llamada a funcion precursores() ..." << endl;
     for (int i : miArbol.precursores()) {
         cout << i << " ";
     }
-    cout << endl;
+    cout << endl << endl;
 
-    // Definimos un rating límite para borrar (ej. menor o igual a 4.1)
-    float rating_limite = 4.1f; 
-    cout << "Lamada a funcion borrar_ratings(" << rating_limite << ") ===" << endl;
-    cout << "Eliminando libros con rating promedio menor o igual a " << rating_limite << "..." << endl;
-    
-    miArbol.borrar_ratings(rating_limite);
+    // FUNCIÓN BORRAR_RATINGS
+    // Borramos libros con rating <= 4.45
+    float r = 4.45f;
 
-    cout << "\n=== ESTADO DEL ARBOL POST-BORRADO ===" << endl;
-    cout << "Cantidad total de nodos restantes en el arbol: " << miArbol.size() << endl;
+    cout << "Llamada a funcion borrar_ratings(" << r << ") ..." << endl << endl;
+    miArbol.borrar_ratings(r);
     
-    cout << "Libros que quedaron en el arbol (listar()):" << endl;
+    cout << "Total de nodos luego del borrado: " << miArbol.size() << endl;
+    
+    cout << "Llamada a funcion listar() luego del borrado ..." << endl;
     for (int i : miArbol.listar()) {
-        cout << i << " ";
-    }
-    cout << endl;
-
-    cout << "Nuevos precursores calculados:" << endl;
-    for (int i : miArbol.precursores()) {
         cout << i << " ";
     }
     cout << endl;
