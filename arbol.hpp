@@ -38,7 +38,6 @@ public:
     std::vector<std::string> hijos(std::string data);
 
     Nodo* insertar(Nodo* padre, std::string data);
-    bool remover(std::string data);
     
     Nodo* buscar(Nodo* nodo, std::string data);
 

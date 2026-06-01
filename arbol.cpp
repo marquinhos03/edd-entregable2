@@ -78,7 +78,6 @@ Arbol::Nodo* Arbol::insertar(Nodo* padre, string data) {
 
 string Arbol::padre(string data) {
     Nodo* nodo = buscar(rootNodo, data);
-    //if (!nodo || !nodo->m_padre) throw runtime_error("No tiene padre");
     if (!nodo || !nodo->m_padre) return "No tiene padre";
 
     return nodo->m_padre->m_data;
@@ -117,30 +116,6 @@ void Arbol::deleteSubtree(Nodo* nodo) {
     delete nodo;
     // Actualizar el tamaño del árbol por cada nodo eliminado.
     treeSize--;
-}
-
-bool Arbol::remover(string data) {
-    Nodo* nodo = buscar(rootNodo, data);
-    if (!nodo) return false;
-
-    if (nodo == rootNodo) {
-        deleteSubtree(rootNodo);
-        rootNodo = nullptr;
-        treeSize = 0;
-        return true;
-    }
-
-    Nodo* padre = nodo->m_padre;
-    auto& siblings = padre->m_hijos;
-
-    siblings.erase(
-        remove(siblings.begin(), siblings.end(), nodo),
-        siblings.end()
-    );
-
-    deleteSubtree(nodo);
-    treeSize--;
-    return true;
 }
 
 /**
