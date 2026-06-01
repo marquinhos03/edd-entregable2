@@ -12,7 +12,7 @@ using namespace std;
 int main() {
     // Inicializamos el árbol
     Arbol miArbol(1000);
-    auto raiz = miArbol.insertar(nullptr, "Raiz Libros");
+    miArbol.insertar(nullptr, "Raiz Libros");
 
     // GENERADO CON GEMINI
 
@@ -77,7 +77,7 @@ int main() {
     cout << "Llamada a funcion borrar_ratings(" << r << ") ..." << endl << endl;
     miArbol.borrar_ratings(r);
     
-    cout << "Total de nodos luego del borrado: " << miArbol.size() << endl;
+    cout << "Total de nodos luego del borrado: " << miArbol.size() << endl << endl;
     
     cout << "Llamada a funcion listar() luego del borrado ..." << endl;
     for (int i : miArbol.listar()) {
