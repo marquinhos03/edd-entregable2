@@ -56,6 +56,11 @@ int main() {
     cout << "Total de nodos en el árbol: " << miArbol.size() << endl;
     cout << endl;
 
+
+    //
+    // PRUEBAS Y LLAMADAS A FUNCIONES
+    //
+
     // FUNCIÓN LISTAR
     cout << "Llamada a función listar() ..." << endl;
     for (int i : miArbol.listar()) {
